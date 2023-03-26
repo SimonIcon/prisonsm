@@ -1,5 +1,4 @@
-import ClearUser from "../adminDashboard/ClearUser";
-import CreateSchedule from "../adminDashboard/CreateSchedule";
+import Prisoners from "../adminDashboard/Prisoners";
 import Users from "../adminDashboard/Users";
 import VerifyUsers from "../adminDashboard/VerifyUsers";
 
@@ -20,6 +19,13 @@ const items = [
         description: "unverified wardens"
 
     },
+    {
+        id: "prisoners",
+        label: "prisoners",
+        component: <Prisoners />,
+        description: "prisoner information"
+
+    }
 
 
 ]

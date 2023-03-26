@@ -124,14 +124,14 @@ const Login = ({ setActive, onFormSwitch, setUser }) => {
       setTimeout(() => {
         setEmailError("");
         setEmail("")
-      }, 3000)
+      }, 2000)
 
     } else if (password.length < 6) {
       setPasswordError("Your enterred a weak password, your password should have atleast six characters")
       setTimeout(() => {
         setPasswordError('')
         setpassword('')
-      }, 3000)
+      }, 2000)
     } else {
       wardens.map((warden) => {
         if (email === warden.email && password === warden.password) {
@@ -140,7 +140,7 @@ const Login = ({ setActive, onFormSwitch, setUser }) => {
             loginInUser(email, password)
             setActive(1);
             setUser(0)
-          }, 5000)
+          }, 2000)
 
         } else {
           setLoginError("invalid warden, try signing up or check your login credentials")

@@ -1,25 +1,18 @@
-import AdmitPrisoner from "../wardenDashboard/AdmitPrisoner";
 import PrisonerCaseReveal from "../wardenDashboard/PrisonerCaseReveal";
 import PrisonerEducationSchedular from "../wardenDashboard/PrisonerEducationSchedular";
 import PrisonerHealthRecord from "../wardenDashboard/PrisonerHealthRecord";
 import PrisonerTaskSchedular from "../wardenDashboard/PrisonerTaskSchedular";
 import PrisonerVisitorRecord from "../wardenDashboard/PrisonerVisitorRecord";
-import RecordTransfers from "../wardenDashboard/RecordTransfers";
+import RegisterPrisoners from '../wardenDashboard/RegisterPrisoners';
 
 
 const taskList = [
     {
         id: "admitPrisoner",
-        taskName: "admit prisoner",
+        taskName: "register prisoner",
         taskDescription: "simple description",
-        component: <AdmitPrisoner />
+        component: <RegisterPrisoners />
 
-    },
-    {
-        id: "RecordTransfers",
-        taskName: "transfer record",
-        taskDescription: "simple description",
-        component: <RecordTransfers />
     },
     {
         id: "PrisonerTaskSchedular",
@@ -35,7 +28,7 @@ const taskList = [
     },
     {
         id: "PrisonerCaseReveal",
-        taskName: "case reveal",
+        taskName: "case appeal",
         taskDescription: "case reveal appointments",
         component: <PrisonerCaseReveal />
     },
