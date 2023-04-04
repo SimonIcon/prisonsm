@@ -1,7 +1,9 @@
 import { Box, Card, CardMedia, Typography } from '@material-ui/core';
 import { makeStyles } from '@mui/styles'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { PrisonContext } from '../api/context';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { db } from '../api/firebase';
 
 const useStyles = makeStyles((theme) => ({
   cardContainer: {
@@ -108,9 +110,34 @@ const useStyles = makeStyles((theme) => ({
 
 const VerifyUsers = () => {
   const classes = useStyles();
-  const { wardens, verifyWarden } = useContext(PrisonContext);
+  const { wardens } = useContext(PrisonContext);
   const [comment, setComment] = useState('')
   const [activeWarden, setActiveWarden] = useState([])
+  const [wardenStatus, setWardenStatus] = useState("");
+
+
+  const verifyWarden = (id) => {
+    const wardenDocRef = doc(db, "wardens", id);
+    getDoc(wardenDocRef)
+      .then((doc) => {
+        if (doc.exists()) {
+          updateDoc(wardenDocRef, {
+            status: "active"
+          });
+          wardenDocRef.onSnapshot((snapshot) => {
+            setWardenStatus(snapshot.data().status);
+          });
+        } else {
+          console.log("No such document!");
+        }
+      })
+      .catch((error) => {
+        console.log("Error getting document:", error);
+      });
+  };
+
+
+
 
 
 

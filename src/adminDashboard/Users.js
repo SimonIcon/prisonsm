@@ -1,9 +1,11 @@
 import { Box, List, ListItem, ListItemText, MenuItem, Modal, Select, Typography } from '@material-ui/core';
 import { ListItemButton } from '@mui/material';
 import { makeStyles } from '@mui/styles'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { PrisonContext } from '../api/context';
 import taskList from '../api/taskData';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { db } from '../api/firebase';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -216,13 +218,39 @@ const useStyles = makeStyles((theme) => ({
 
 const Users = () => {
   const classes = useStyles();
-  const { wardens, removeWarden } = useContext(PrisonContext);
+  const { wardens } = useContext(PrisonContext);
   const [openAddTask, setOpenAddTask] = useState(false)
   const [selectTask, setSelectedTask] = useState('');
   const { handleAddTask, error } = useContext(PrisonContext)
   const [activeWarden, setActiveWarden] = useState([])
   const [description, setDescription] = useState('');
   const [taskId, setTaskId] = useState('');
+  useEffect(() => {
+    handleAddTask()
+  }, [activeWarden.id])
+  // useEffect(() => {
+  //   removeWarden(activeWarden.id)
+  // }, [activeWarden.id])
+  const [wardenStatus, setWardenStatus] = useState("");
+  const removeWarden = (id) => {
+    const wardenDocRef = doc(db, "wardens", id);
+    getDoc(wardenDocRef)
+      .then((doc) => {
+        if (doc.exists()) {
+          updateDoc(wardenDocRef, {
+            status: "persive"
+          });
+          wardenDocRef.onSnapshot((snapshot) => {
+            setWardenStatus(snapshot.data().status);
+          });
+        } else {
+          console.log("No such document!");
+        }
+      })
+      .catch((error) => {
+        console.log("Error getting document:", error);
+      });
+  };
 
   return (
     <Box container>

@@ -49,7 +49,6 @@ const useStyles = makeStyles((theme) => ({
 
 const AdminPage = () => {
   const classes = useStyles()
-  const drawerWidth = 220;
   const [selected, setSelected] = useState(items[0].id)
 
   // rendering admin components
@@ -73,9 +72,9 @@ const AdminPage = () => {
       </AppBar>
       <Box>
         <Drawer sx={{
-          width: drawerWidth,
+          width: "30vw",
           flexShrink: 0, '& .MuiDrawer-paper': {
-            width: drawerWidth, boxSizing: 'border-box', backgroundColor: '#101F33',
+            width: "30vw", boxSizing: 'border-box', backgroundColor: '#101F33',
             color: "whitesmoke", paddingTop: "70px",
 
           },

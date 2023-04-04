@@ -9,7 +9,8 @@ function App() {
   return (
     <div className="App">
       {
-        active === 0 ? (<Authentication setActive={setActive} setUser={setUser} />) : (<Mainpage user={user} />)
+        active === 0 ? (<Authentication setActive={setActive} setUser={setUser} />) :
+          (<Mainpage user={user} setActive={setActive} />)
       }
 
 

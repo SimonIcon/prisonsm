@@ -10,12 +10,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const Mainpage = ({ user }) => {
+const Mainpage = ({ user, setActive }) => {
 
   return (
     <div>
       {
-        user ? <AdminPage /> : <UserPage />
+        user ? <AdminPage /> : <UserPage setActive={setActive} />
       }
     </div>
   )

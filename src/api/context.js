@@ -1,4 +1,4 @@
-import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { addDoc, collection, doc, getDoc, getDocs, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
 import React, { createContext, useEffect, useState } from 'react'
 import { auth, db } from './firebase';
@@ -36,7 +36,14 @@ const Context = ({ children }) => {
         });
     }, []);
 
-
+    // handle forgot password
+    const handleForgotPassword = (email) => {
+        sendPasswordResetEmail(auth, email).then((res) => {
+            console.log("handling forgot password")
+        }).catch((erro) => {
+            console.log("error occurred")
+        })
+    }
 
 
 
@@ -79,7 +86,51 @@ const Context = ({ children }) => {
         };
 
         fetchWardens()
-    }, [])
+    }, [wardens])
+    // adding the task function
+    const [error, setError] = useState("");
+    const handleAddTask = async (task, id, description, taskId) => {
+        console.log(id)
+        if (task === " ") {
+            setTimeout(() => {
+                setError("your have not selected task")
+            })
+        } else {
+            const wardenDocRef = doc(db, "wardens", id);
+            getDoc(wardenDocRef)
+                .then((doc) => {
+                    if (doc.exists()) {
+                        const timestamp = serverTimestamp();
+                        const tasksCollectionRef = collection(db, "wardens", id, "tasks");
+                        addDoc(tasksCollectionRef, {
+                            taskName: task,
+                            taskDescription: description,
+                            createdAt: timestamp,
+                            taskId: taskId
+                        });
+
+
+                    } else {
+                        console.log("No such document!");
+                    }
+                })
+                .catch((error) => {
+                    console.log("Error getting document:", error);
+                });
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+    // ended of warden
     // fetching prisoner data
     const [prisoner, setPrisoner] = useState([]);
     const prisonerData = []
@@ -167,89 +218,6 @@ const Context = ({ children }) => {
         }
         getPrisonerDetails()
     }, [])
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // adding the task function
-    const [error, setError] = useState("");
-    const handleAddTask = async (task, id, description, taskId) => {
-        console.log(id)
-        if (task === " ") {
-            setTimeout(() => {
-                setError("your have not selected task")
-            })
-        } else {
-            const wardenDocRef = doc(db, "wardens", id);
-            getDoc(wardenDocRef)
-                .then((doc) => {
-                    if (doc.exists()) {
-                        const timestamp = serverTimestamp();
-                        const tasksCollectionRef = collection(db, "wardens", id, "tasks");
-                        addDoc(tasksCollectionRef, {
-                            taskName: task,
-                            taskDescription: description,
-                            createdAt: timestamp,
-                            taskId: taskId
-                        });
-
-
-                    } else {
-                        console.log("No such document!");
-                    }
-                })
-                .catch((error) => {
-                    console.log("Error getting document:", error);
-                });
-        }
-    }
-
-    // verifying wardens
-    const verifyWarden = (id) => {
-        const wardenDocRef = doc(db, "wardens", id);
-        getDoc(wardenDocRef)
-            .then((doc) => {
-                if (doc.exists()) {
-                    updateDoc(wardenDocRef, {
-                        status: "active"
-                    });
-                } else {
-                    console.log("No such document!");
-                }
-            })
-            .catch((error) => {
-                console.log("Error getting document:", error);
-            });
-    }
-
-    // removing wardens
-    const removeWarden = (id) => {
-        const wardenDocRef = doc(db, "wardens", id);
-        getDoc(wardenDocRef)
-            .then((doc) => {
-                if (doc.exists()) {
-                    updateDoc(wardenDocRef, {
-                        status: "persive"
-                    });
-                } else {
-                    console.log("No such document!");
-                }
-            })
-            .catch((error) => {
-                console.log("Error getting document:", error);
-            });
-
-    }
     // adding prisoner functions
     const registerPrisoner = (prisonerName, idNumber, age, homeTown, prisonerNumber, crime, url, imprisonment) => {
         const timestamp = serverTimestamp();
@@ -374,10 +342,10 @@ const Context = ({ children }) => {
     return (
         <PrisonContext.Provider value={{
             loginInUser, logOutUser, wardens, user, handleAddTask,
-            error, verifyWarden, userTask, removeWarden, registerPrisoner, prisoner,
-            prisonerData, setActivePrisoner, activePrisoner, removeWarden, addPrisonerVisitor,
+            error, userTask, registerPrisoner, prisoner,
+            prisonerData, setActivePrisoner, activePrisoner, addPrisonerVisitor,
             visitorRecords, setSelectedPrisoner, selectedPrisoner, addCaseAppealRecord,
-            addEducationRecord, addHealthRecord, addDutiesRecord
+            addEducationRecord, addHealthRecord, addDutiesRecord, handleForgotPassword
         }}>
             {children}
         </PrisonContext.Provider>

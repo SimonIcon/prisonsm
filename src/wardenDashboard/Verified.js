@@ -4,7 +4,6 @@ import { makeStyles } from '@mui/styles';
 import { Box } from '@mui/system';
 import React, { useContext, useState, useEffect } from 'react'
 import taskList from "../api/taskData";
-import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import info from '../api/info';
 import { PrisonContext } from '../api/context';
 import Profile from './Profile';
@@ -62,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-const Verified = ({ user }) => {
+const Verified = ({ user, setActive }) => {
     const classes = useStyles()
     const drawerWidth = 230;
 
@@ -134,7 +133,7 @@ const Verified = ({ user }) => {
                             },
                         }}>
                         <Box className={classes.profileContainer}>
-                            <Profile user={user} />
+                            <Profile user={user} setActive={setActive} />
 
                         </Box>
 

@@ -1,7 +1,8 @@
-import { TextField, Typography } from '@material-ui/core'
+import { Button, DialogContent, DialogContentText, DialogTitle, TextField, Typography } from '@material-ui/core'
 import React, { useState, useContext } from 'react'
 import { makeStyles } from '@mui/styles'
 import { PrisonContext } from '../api/context'
+import { Dialog } from '@mui/material'
 
 
 
@@ -99,6 +100,19 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 20,
 
 
+  },
+  DialogContainer: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "center"
+  },
+  forgotpass: {
+    backgroundColor: "palegreen",
+    border: "none",
+    paddingLeft: 40,
+    fontSize: 12,
+    fontWeight: "600"
   }
 
 }))
@@ -111,7 +125,7 @@ const Login = ({ setActive, onFormSwitch, setUser }) => {
   const [loginComment, setLoginComment] = useState("")
   const [loginError, setLoginError] = useState('');
   // calling loginInUser from useUserContext
-  const { loginInUser, wardens } = useContext(PrisonContext)
+  const { loginInUser, wardens, handleForgotPassword } = useContext(PrisonContext)
   // function to validate email
   function validateEmail(e) {
     const re = /\S+@\S+\.\S+/;
@@ -159,6 +173,12 @@ const Login = ({ setActive, onFormSwitch, setUser }) => {
     loginInUser(email, password)
 
   }
+
+
+  const [open, setOpen] = useState(false);
+  const [emailOne, setEmailOne] = useState('');
+  const [error, setError] = useState(null);
+
   return (
     <div className={classes.container}>
       <Typography className={classes.title}>warden login only</Typography>
@@ -187,6 +207,9 @@ const Login = ({ setActive, onFormSwitch, setUser }) => {
         className={classes.input}
         label="Enter your password"
       /><br /><br />
+      <button onClick={() => {
+        setOpen(true)
+      }} className={classes.forgotpass}>Forgot password</button>
       <button onClick={() => { handlesubmit() }} className={classes.loginBtn}>sign in</button>
       <div className={classes.toggleContainer}>
         <span className={classes.toggleLabel}>Don't have an account? </span><span>
@@ -194,6 +217,35 @@ const Login = ({ setActive, onFormSwitch, setUser }) => {
         </span>
 
       </div>
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <DialogTitle>Forgot Password?</DialogTitle>
+        <DialogContent className={classes.DialogContainer}>
+          <DialogContentText>
+            Enter your email address below and we'll send you a password reset
+            link.
+            <TextField
+              margin="dense"
+              id="email"
+              placeholder="Email Address"
+              type="email"
+              value={emailOne}
+              onChange={(e) => setEmailOne(e.target.value)}
+
+
+            />
+            <Button onClick={() => {
+              handleForgotPassword(emailOne)
+              setTimeout(() => {
+                setOpen(false)
+              }, 1000);
+            }
+
+            }>
+              Submit
+            </Button>
+          </DialogContentText>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

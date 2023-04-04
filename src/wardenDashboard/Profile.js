@@ -1,6 +1,7 @@
 import { Box, Typography } from '@material-ui/core'
 import { makeStyles } from '@mui/styles'
-import React from 'react'
+import React, { useContext } from 'react'
+import { PrisonContext } from '../api/context';
 
 const useStyles = makeStyles((theme) => ({
     image: {
@@ -37,13 +38,33 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: "600",
         textTransform: "lowercase",
 
+    },
+    logoutButton: {
+        width: "70%",
+        fontSize: 16,
+        fontWeight: "bold",
+        textAlign: "center",
+        paddingTop: 5,
+        paddingBottom: 5,
+        textTransform: "capitalize",
+        borderRadius: 20,
+        marginLeft: 20,
+        marginTop: 10
     }
 
 }))
 
-const Profile = ({ user }) => {
+const Profile = ({ user, setActive }) => {
     const classes = useStyles()
-    console.log(user)
+    const { logOutUser } = useContext(PrisonContext)
+    const handleLogOut = () => {
+        logOutUser()
+        setTimeout(() => {
+            setActive(0)
+        }, 1500);
+
+    }
+
     return (
         <Box className={classes.container}>
             <img src={user.profilePicture} alt="m" className={classes.image} />
@@ -59,6 +80,7 @@ const Profile = ({ user }) => {
                 <Typography className={classes.detailLabel}>work id</Typography>
                 <Typography className={classes.detailValue}>{user.workId}</Typography>
             </div>
+            <button onClick={() => handleLogOut()} className={classes.logoutButton}>log out</button>
         </Box>
     )
 }

@@ -12,12 +12,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const UserPage = () => {
+const UserPage = ({ setActive }) => {
   const classes = useStyles();
   const { user } = useContext(PrisonContext)
   return (
     <Box className={classes.container}>
-      {user.status === "persive" ? <NotVerified user={user} /> : <Verified user={user} />}
+      {user.status === "persive" ? <NotVerified user={user} /> : <Verified user={user} setActive={setActive} />}
     </Box>
 
 
